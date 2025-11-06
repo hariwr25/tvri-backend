@@ -1,15 +1,18 @@
 const mysql = require('mysql2');
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root', // sesuaikan dengan user MySQL kamu
-  password: '', // kosongkan jika root tanpa password
-  database: 'tvri_db' // pastikan ini nama database kamu
-});
+// Gunakan koneksi dari environment Railway jika tersedia, jika tidak pakai lokal
+const db = mysql.createConnection(
+  process.env.MYSQL_URL || {
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'tvri_db',
+  }
+);
 
-db.connect(err => {
+db.connect((err) => {
   if (err) {
-    console.error('Gagal konek ke database:', err);
+    console.error('❌ Gagal konek ke database:', err);
   } else {
     console.log('✅ Terhubung ke database MySQL');
   }
